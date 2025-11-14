@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 PROJECT_PACKAGE_NAME = 'autonumber-django'
-APPLICATION_NAME = 'Autonumber Entry'
+APPLICATION_NAME = 'Autonumber'
 NAVIGATION_LINKS = 'autonumber.ui.urls.get_navigation_links'
 
 
