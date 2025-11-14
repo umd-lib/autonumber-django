@@ -1,0 +1,44 @@
+import pytest
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+from autonumber.ui.models import AutoNumber
+
+# These tests use three fixtures specified in conftest.py
+
+@pytest.mark.django_db
+def test_must_have_name(repository_one):
+  date = timezone.now().date()
+
+  auto_number = AutoNumber(
+    repository=repository_one,
+    entry_date=date,
+  )
+
+  with pytest.raises(ValidationError):
+    auto_number.full_clean()
+
+
+@pytest.mark.django_db
+def test_must_have_repository(name_one):
+  date = timezone.now().date()
+
+  auto_number = AutoNumber(
+    name=name_one,
+    entry_date=date,
+  )
+
+  with pytest.raises(ValidationError):
+    auto_number.full_clean()
+
+
+@pytest.mark.django_db
+def test_valid_auto_number_can_save(auto_number_one, name_one, repository_one):
+
+  # The fixture already created and saved it.
+  # Reloading it just to be sure
+  auto_number_one.refresh_from_db()
+
+  assert auto_number_one.name == name_one
+  assert auto_number_one.repository == repository_one
+  assert str(auto_number_one.entry_date) == '2016-03-31'
