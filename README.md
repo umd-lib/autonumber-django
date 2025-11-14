@@ -106,7 +106,7 @@ Once you have installed the project using either method, you need to set up the 
     python src/manage.py runserver
     ```
 
-4.  Visit **`http://127.0.0.1:8000`** in your web browser.
+4.  Visit **[http://localhost:8000](http://localhost:8000)** in your web browser.
 
 ---
 
