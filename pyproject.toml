@@ -10,12 +10,11 @@ dependencies = [
     "djangosaml2>=1.11.1",
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
-    "debugpy>=1.8.17",
     "pytest>=8.4.2",
     "pytest-django>=4.11.1",
-    "ruff>=0.14.3",
+    "ruff>=0.14.5",
 ]
 
 [build-system]
