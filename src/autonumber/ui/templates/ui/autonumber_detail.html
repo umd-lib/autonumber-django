@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><strong>{{ object.id }}</strong></h2>
+
+<table class="grid">
+  <tbody>
+    <tr>
+      <th>Entry date</th>
+      <td>{{ object.entry_date }}</td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td><a href="{{ object.name.get_absolute_url }}">{{ object.name }}</a></td>
+    </tr>
+    <tr>
+      <th>Repository</th>
+      <td><a href="{{ object.repository.get_absolute_url }}">{{ object.repository }}</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <a href="{% url 'autonumber_update' object.pk %}" class="button edit">Edit</a>
+        <a href="{{request.META.HTTP_REFERER}}" class="button">Go back</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

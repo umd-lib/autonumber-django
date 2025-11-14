@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <h2>Are you sure you want to delete autonumber {{ object.id }}?</h2>
+  <p>This action cannot be undone.</p>
+
+  <button type="submit" class="delete">Yes, delete</button>
+  <a href="{{ object.get_absolute_url }}" class="button">Cancel</a>
+</form>
+{% endblock %}

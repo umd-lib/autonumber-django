@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="grid">
+  <thead>
+    <tr>
+      <th>CAS Directory ID</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in object_list %}
+    <tr>
+      <td><a href="{% url 'user_detail' user.pk %}">{{ user.cas_directory_id }}</a></td>
+      <td>{{ user.name }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

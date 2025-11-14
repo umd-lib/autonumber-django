@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="padding-bottom: 10px;">
+  {% if is_paginated %}
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" class="button">&laquo;</a>
+  {% else %}
+  <span class="button">&laquo;</span>
+  {% endif %}
+
+  {% for i in paginator.page_range %}
+  {% if page_obj.number == i %}
+  <strong class="button">&nbsp;{{ i }}&nbsp;</strong>
+  {% else %}
+  <a href="?page={{ i }}" class="button">&nbsp;{{ i }}&nbsp;</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" class="button">&raquo;</a>
+  {% else %}
+  <span class="button">&raquo;</span>
+  {% endif %}
+  {% endif %}
+
+  <a href="{% url 'autonumber_create' %}" class="button create">New</a>
+  <a href="{% url 'batch' %}" class="button create">Create Multiple Autonumbers</a>
+</div>
+
+<table class="grid">
+  <thead>
+    <tr>
+      <th><a href="?sort=id">Number</a></th>
+      <th><a href="?sort=entry_date">Entry date</a></th>
+      <th><a href="?sort=name__initials">Name</a></th>
+      <th><a href="?sort=repository__name">Repository</a></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for auto_number in object_list %}
+    <tr>
+      <td><a href="{{ auto_number.get_absolute_url }}">{{ auto_number.id }}</a></td>
+      <td>{{ auto_number.entry_date }}</td>
+      <td><a href="{{ auto_number.name.get_absolute_url }}">{{ auto_number.name }}</a></td>
+      <td><a href="{{ auto_number.repository.get_absolute_url }}">{{ auto_number.repository }}</a></td>
+      <td><a href="{% url 'autonumber_update' auto_number.pk %}" class="button edit">Edit</a></td>
+      <td><a href="{% url 'autonumber_delete' auto_number.pk %}" class="button delete">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if is_paginated %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-heading">
+  <h1>Create Multiple Autonumbers</h1>
+</div>
+
+<form method="post">
+  {% csrf_token %}
+
+  <table class="grid">
+    <tbody>
+      <tr class="field">
+        <th>{{ form.entry_date.label_tag }}</th>
+        <td>{{ form.entry_date }}</td>
+      </tr>
+      <tr class="field">
+        <th>{{ form.name_initials.label_tag }}</th>
+        <td>{{ form.name_initials }}</td>
+      </tr>
+      <tr class="field">
+        <th>{{ form.repository_name.label_tag }}</th>
+        <td>{{ form.repository_name }}</td>
+      </tr>
+      <tr class="field">
+        <th>{{ form.quantity.label_tag }}</th>
+        <td>{{ form.quantity }}</td>
+      </tr>
+      <tr class="actions">
+        <th></th>
+        <td><button type="submit" class="btn btn-success">Create Autonumbers</button></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+{% endblock %}

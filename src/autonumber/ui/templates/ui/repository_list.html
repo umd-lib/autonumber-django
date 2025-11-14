@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="padding-bottom: 10px;">
+  {% if is_paginated %}
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}" class="button">&laquo;</a>
+  {% else %}
+  <span class="button">&laquo;</span>
+  {% endif %}
+
+  {% for i in paginator.page_range %}
+  {% if page_obj.number == i %}
+  <strong class="button">&nbsp;{{ i }}&nbsp;</strong>
+  {% else %}
+  <a href="?page={{ i }}" class="button">&nbsp;{{ i }}&nbsp;</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}" class="button">&raquo;</a>
+  {% else %}
+  <span class="button">&raquo;</span>
+  {% endif %}
+  {% endif %}
+
+  <a href="{% url 'repository_create' %}" class="button create">New</a>
+</div>
+
+<table class="grid">
+  <thead>
+    <tr>
+      <th><a href="?sort=name">Name</a></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for repository in object_list %}
+    <tr>
+      <td><a href="{{ repository.get_absolute_url }}">{{ repository.name }}</a></td>
+      <td>
+        <form method="GET" action="{% url 'repository_update' repository.pk %}">
+          <button class="edit" type="submit">Edit</button>
+        </form>
+      </td>
+
+      <td>
+        {% if not repository.auto_numbers.all %}
+        <form method="GET" action="{% url 'repository_delete' repository.pk %}">
+          <button class="delete" type="submit">Delete</button>
+        </form>
+        {% else %}
+        <button disabled="disabled">Delete</button>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

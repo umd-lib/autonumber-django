@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><strong>{{ object.initials }}</strong></h2>
+
+<table class="grid">
+  <tbody>
+    <tr>
+      <th>CAS Directory ID</th>
+      <td>{{ object.cas_directory_id }}</td>
+    </tr>
+    <tr>
+      <th>Name:</th>
+      <td>{{ object.name }}</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>
+        <a href="{{request.META.HTTP_REFERER}}" class="button">Go back</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

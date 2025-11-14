@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2><strong>{{ object.initials }}</strong></h2>
+
+<table class="grid">
+  <tbody>
+  <tr>
+    <th>Initials</th>
+    <td>{{ object.initials }}</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>
+      <a href="{% url 'name_update' object.pk %}" class="button edit">Edit</a>
+      <a href="{{request.META.HTTP_REFERER}}" class="button">Go back</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+{% endblock %}

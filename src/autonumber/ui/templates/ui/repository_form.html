@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if object %}
+<h2><strong>{{ object.id }}</strong></h2>
+{% else %}
+<h2> New </h2>
+{% endif %}
+
+{% include "includes/form_errors.html" with form=form %}
+
+<form method="post">
+  {% csrf_token %}
+  <table class="grid">
+    <tbody>
+      <tr>
+        <th><label for="{{ form.name.id_for_label }}">Name</label></th>
+        <td>{{ form.name }}</td>
+      </tr>
+      <tr>
+        <th></th>
+         <td>
+          <button type="submit" class="create">Save</button>
+          <a href="{% url 'repository_list' %}" class="button delete">Cancel</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+{% endblock %}
