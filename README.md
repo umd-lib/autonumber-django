@@ -69,7 +69,6 @@ Once you have installed the project using either method, you need to set up the 
 ### Option 1: Using `uv` (Recommended)
 
 1.  **Run the database migrations:**
-    This creates the `db.sqlite3` file and sets up the application tables.
     ```zsh
     uv run src/manage.py migrate
     ```
@@ -87,10 +86,9 @@ Once you have installed the project using either method, you need to set up the 
 
 4.  Visit **`http://127.0.0.1:8000`** in your web browser.
 
-### Option 1: Using pyenv
+### Option 2: Using pyenv
 
 1.  **Run the database migrations:**
-    This creates the `db.sqlite3` file and sets up the application tables.
     ```zsh
     python src/manage.py migrate
     ```
@@ -124,3 +122,5 @@ This project uses `pytest` and `pytest-django`.
     ```zsh
     pytest
     ```
+    **NOTE** With pyenv you may need to `source .venv/bin/activate` again after installing the optional
+    dependencies, so that the pytest shim gets properly updated in your terminal session.
