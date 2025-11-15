@@ -101,7 +101,14 @@ class AutoNumberCreateView(CreateView):
     return redirect(auto_number.get_absolute_url())
 
   def form_invalid(self, form):
-    messages.error(self.request, 'Error creating AutoNumber.')
+    for field, error_list in form.errors.items():
+      for error in error_list:
+        if field == '__all__':
+          messages.error(self.request, error)
+        else:
+          field_label = form.fields[field].label
+          messages.error(self.request, f'{field_label}: {error}')
+
     return super().form_invalid(form)
 
 
@@ -123,7 +130,14 @@ class AutoNumberUpdateView(UpdateView):
     return super().form_valid(form)
 
   def form_invalid(self, form):
-    messages.error(self.request, 'Error updating AutoNumber.')
+    for field, error_list in form.errors.items():
+      for error in error_list:
+        if field == '__all__':
+          messages.error(self.request, error)
+        else:
+          field_label = form.fields[field].label
+          messages.error(self.request, f'{field_label}: {error}')
+
     return super().form_invalid(form)
 
 

@@ -4,10 +4,7 @@
 
 {% if object %}
 <h2><strong>{{ object.id }}</strong></h2>
-{% else %}
 {% endif %}
-
-{% include "includes/form_errors.html" with form=form %}
 
 <form method="post">
   {% csrf_token %}

@@ -24,9 +24,11 @@ class RepositoryListView(ListView):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Repositories',
-    })
+      }
+    )
     return context
 
   def get_queryset(self):
@@ -52,9 +54,11 @@ class RepositoryDetailView(DetailView):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Repository',
-    })
+      }
+    )
     return context
 
 
@@ -64,9 +68,11 @@ class RepositoryCreateView(CreateView):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Create Repository',
-    })
+      }
+    )
     return context
 
   def form_valid(self, form):
@@ -74,7 +80,14 @@ class RepositoryCreateView(CreateView):
     return super().form_valid(form)
 
   def form_invalid(self, form):
-    messages.error(self.request, 'There was a problem creating the repository.')
+    for field, error_list in form.errors.items():
+      for error in error_list:
+        if field == '__all__':
+          messages.error(self.request, error)
+        else:
+          field_label = form.fields[field].label
+          messages.error(self.request, f'{field_label}: {error}')
+
     return super().form_invalid(form)
 
 
@@ -84,9 +97,11 @@ class RepositoryUpdateView(UpdateView):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Update Repository',
-    })
+      }
+    )
     return context
 
   def form_valid(self, form):
@@ -94,7 +109,14 @@ class RepositoryUpdateView(UpdateView):
     return super().form_valid(form)
 
   def form_invalid(self, form):
-    messages.error(self.request, 'There was a problem updating the repository.')
+    for field, error_list in form.errors.items():
+      for error in error_list:
+        if field == '__all__':
+          messages.error(self.request, error)
+        else:
+          field_label = form.fields[field].label
+          messages.error(self.request, f'{field_label}: {error}')
+
     return super().form_invalid(form)
 
 
@@ -104,9 +126,11 @@ class RepositoryDeleteView(DeleteView):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Delete Repository',
-    })
+      }
+    )
     return context
 
   def post(self, request, *args, **kwargs):
