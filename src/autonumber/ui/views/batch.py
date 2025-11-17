@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any
 
 from django.contrib import messages
@@ -13,18 +14,20 @@ class BatchView(View):
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
-    context.update({
+    context.update(
+      {
         'title': 'Create Multiple Autonumbers',
-    })
+      }
+    )
     return context
 
   def get(self, request):
-    """Render the new batch form"""
-    form = BatchForm()
+    initial_data = {'entry_date': date.today(), 'quantity': 1}
+
+    form = BatchForm(initial=initial_data)
     return render(request, self.template_name, {'form': form})
 
   def post(self, request):
-    """Handle batch creation"""
     form = BatchForm(request.POST)
 
     if form.is_valid():
@@ -41,9 +44,11 @@ class BatchView(View):
       }
 
       stats = AutoNumber.create_batch(quantity, auto_number_params)
+      quantity = stats['count']
+      first = stats['first']
+      last = stats['last']
 
-      for key, val in stats.items():
-        messages.success(request, f'{key}: {val}')
+      messages.success(self.request, f'Created {quantity} Autonumbers ({first}-{last})')
 
       return redirect('batch')
 

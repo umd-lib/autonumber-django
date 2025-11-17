@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any
 
 from django.contrib import messages
@@ -81,7 +82,7 @@ class AutoNumberCreateView(CreateView):
 
   def get_initial(self):
     # Equivalent to building nested objects in Rails
-    return {'name': Name(), 'repository': Repository()}
+    return {'name': Name(), 'repository': Repository(), 'entry_date': date.today()}
 
   def form_valid(self, form):
     # mimic Rails’ auto_number_params logic
