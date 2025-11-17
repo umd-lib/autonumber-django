@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from autonumber.ui.models import AutoNumber, Name, Repository
+
+admin.site.register(AutoNumber)
+admin.site.register(Name)
+admin.site.register(Repository)
