@@ -85,21 +85,10 @@ class AutoNumberCreateView(CreateView):
     return {'name': Name(), 'repository': Repository(), 'entry_date': date.today()}
 
   def form_valid(self, form):
-    # mimic Rails’ auto_number_params logic
-    data = form.cleaned_data
-    repo_name = data.get('repository_name', '').lower().strip()
-    name_initials = data.get('name_initials', '').lower().strip()
+    self.object = form.save()
+    messages.success(self.request, f'Created new number: {self.object.id}')
 
-    repository, _ = Repository.objects.get_or_create(name=repo_name)
-    name, _ = Name.objects.get_or_create(initials=name_initials)
-
-    auto_number = form.save(commit=False)
-    auto_number.repository = repository
-    auto_number.name = name
-    auto_number.save()
-
-    messages.success(self.request, f'Created new number: {auto_number.id}')
-    return redirect(auto_number.get_absolute_url())
+    return redirect(self.object.get_absolute_url())
 
   def form_invalid(self, form):
     for field, error_list in form.errors.items():
