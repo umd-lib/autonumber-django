@@ -34,6 +34,17 @@ class AutoNumberListView(ListView):
         'title': 'Auto Numbers',
       }
     )
+
+    paginator = context['paginator']
+    page_obj = context['page_obj']
+
+    if paginator:
+      context.update(
+        {
+          'elided_page_range': paginator.get_elided_page_range(page_obj.number, on_each_side=2, on_ends=1),
+        }
+      )
+
     return context
 
   def get_queryset(self):

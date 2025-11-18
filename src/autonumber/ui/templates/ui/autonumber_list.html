@@ -10,11 +10,20 @@
   <span class="button">&laquo;</span>
   {% endif %}
 
-  {% for i in paginator.page_range %}
-  {% if page_obj.number == i %}
+  {% for i in elided_page_range %}
+
+  {% if i == paginator.ELLIPSIS %}
+  <span class="button disabled">...</span>
+
+  {% elif page_obj.number == i %}
   <strong class="button">&nbsp;{{ i }}&nbsp;</strong>
+
   {% else %}
-  <a href="?page={{ i }}" class="button">&nbsp;{{ i }}&nbsp;</a>
+  {# Keep the 'sort' parameter if it exists #}
+  <a href="?page={{ i }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+    class="button">
+    &nbsp;{{ i }}&nbsp;
+  </a>
   {% endif %}
   {% endfor %}
 
