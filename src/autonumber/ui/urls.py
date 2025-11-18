@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from django.urls import path
 
+from autonumber.ui.views import login
 from autonumber.ui.views.auto_number import (
   AutoNumberCreateView,
   AutoNumberDeleteView,
@@ -30,7 +31,7 @@ from autonumber.ui.views.user import (
 )
 
 urlpatterns = [
-  path('', BatchView.as_view(), name='root'),
+  path('', login, name='root'),
   path('batch/', BatchView.as_view(), name='batch'),
   path('autocomplete/names/', autocomplete_names, name='autocomplete_names'),
   path(
@@ -83,14 +84,14 @@ urlpatterns = [
 
 
 def get_navigation_links(request: HttpRequest):
-  # if request.user.is_authenticated:
+  if request.user.is_authenticated:
     return {
-      'autonumber_list': 'Autonumber List',
+      'autonumber_list': 'Autonumbers',
       'name_list': 'Names',
-      'repository_list': 'Repositories',
-      'user_list': 'Users'
-      # '': f'Logged in as {request.user.username}',
-      # 'saml2_logout': 'Log Out',
+      'repository_list': 'Repos',
+      'user_list': 'Users',
+      '': f'Logged in as {request.user.username}',
+      'cas_ng_logout': 'Log Out',
     }
-  # else:
-  #   return {'saml2_login': 'Log In'}
+  else:
+    return {'cas_ng_login': 'Log In'}
