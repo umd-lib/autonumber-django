@@ -119,17 +119,16 @@ class NameUpdateView(UpdateView):
     messages.success(self.request, 'Name was successfully updated.')
     return super().form_valid(form)
 
+  def form_invalid(self, form):
+    for field, error_list in form.errors.items():
+      for error in error_list:
+        if field == '__all__':
+          messages.error(self.request, error)
+        else:
+          field_label = form.fields[field].label
+          messages.error(self.request, f'{field_label}: {error}')
 
-def form_invalid(self, form):
-  for field, error_list in form.errors.items():
-    for error in error_list:
-      if field == '__all__':
-        messages.error(self.request, error)
-      else:
-        field_label = form.fields[field].label
-        messages.error(self.request, f'{field_label}: {error}')
-
-  return super().form_invalid(form)
+    return super().form_invalid(form)
 
 
 class NameDeleteView(DeleteView):
