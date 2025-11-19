@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from autonumber.ui.forms import BatchForm
-from autonumber.ui.models import AutoNumber, Name, Repository
+from autonumber.ui.models import AutoNumber, Name
 
 
 class BatchView(View):
@@ -34,7 +34,7 @@ class BatchView(View):
       cleaned = form.cleaned_data
       quantity = cleaned['quantity']
 
-      repository, _ = Repository.objects.get_or_create(name=cleaned['repository'])
+      repository = cleaned['repository']
       name, _ = Name.objects.get_or_create(initials=cleaned['name'])
 
       auto_number_params = {

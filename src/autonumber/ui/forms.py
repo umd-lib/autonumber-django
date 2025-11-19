@@ -24,7 +24,11 @@ class BatchForm(forms.Form):
   quantity = forms.IntegerField(min_value=1, required=True)
   entry_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
   name = forms.CharField(max_length=10, required=True)
-  repository = forms.CharField(max_length=255, required=True)
+  repository = forms.ModelChoiceField(
+    # The queryset tells the dropdown what options to display
+    queryset=Repository.objects.all(),
+    required=True,
+  )
 
   def clean_name_initials(self):
     data = self.cleaned_data.get('name')

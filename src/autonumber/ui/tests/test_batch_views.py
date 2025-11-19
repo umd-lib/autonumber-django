@@ -21,16 +21,13 @@ def test_should_create_auto_number_batch(client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name_initials': auto_number_one.name.initials,
-    'repository_name': auto_number_one.repository.name,
+    'name': auto_number_one.name.initials,
+    'repository': auto_number_one.repository.pk,
     'quantity': quantity_to_add,
   }
 
   url = reverse('batch')
   response = client.post(url, data=form_data)
-
-  if response.context:
-    print(f"FORM ERRORS: {response.context['form'].errors}")
 
   assert AutoNumber.objects.count() == count_before + quantity_to_add
 
@@ -45,7 +42,7 @@ def test_require_name(client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'repository_name': auto_number_one.repository.name,
+    'repository_name': auto_number_one.repository.pk,
     'quantity': 10,
   }
 
@@ -56,7 +53,7 @@ def test_require_name(client, auto_number_one):
 
   assert response.status_code == 200
   assert 'form' in response.context
-  assert 'name_initials' in response.context['form'].errors
+  assert 'name' in response.context['form'].errors
 
 
 @pytest.mark.django_db
@@ -71,7 +68,7 @@ def test_require_repository(client, auto_number_one):
   assert AutoNumber.objects.count() == count_before
   assert response.status_code == 200
   assert 'form' in response.context
-  assert 'repository_name' in response.context['form'].errors
+  assert 'repository' in response.context['form'].errors
 
 
 @pytest.mark.django_db
@@ -80,8 +77,8 @@ def test_require_non_nil_quantity(client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name_initials': auto_number_one.name.initials,
-    'repository_name': auto_number_one.repository.name,
+    'name': auto_number_one.name.initials,
+    'repository': auto_number_one.repository.pk,
     # 'quantity' is omitted
   }
 
@@ -100,8 +97,8 @@ def test_require_non_negative_quantity(client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name_initials': auto_number_one.name.initials,
-    'repository_name': auto_number_one.repository.name,
+    'name': auto_number_one.name.initials,
+    'repository': auto_number_one.repository.pk,
     'quantity': -10
   }
 
