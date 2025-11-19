@@ -23,17 +23,17 @@ class NameForm(forms.ModelForm):
 class BatchForm(forms.Form):
   quantity = forms.IntegerField(min_value=1, required=True)
   entry_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
-  name_initials = forms.CharField(max_length=10, required=True)
-  repository_name = forms.CharField(max_length=255, required=True)
+  name = forms.CharField(max_length=10, required=True)
+  repository = forms.CharField(max_length=255, required=True)
 
   def clean_name_initials(self):
-    data = self.cleaned_data.get('name_initials')
+    data = self.cleaned_data.get('name')
     if data:
       return data.strip().lower()
     return data
 
   def clean_repository_name(self):
-    data = self.cleaned_data.get('repository_name')
+    data = self.cleaned_data.get('repository')
     if data:
       return data.strip().lower()
     return data

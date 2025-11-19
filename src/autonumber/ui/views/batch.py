@@ -34,8 +34,8 @@ class BatchView(View):
       cleaned = form.cleaned_data
       quantity = cleaned['quantity']
 
-      repository, _ = Repository.objects.get_or_create(name=cleaned['repository_name'])
-      name, _ = Name.objects.get_or_create(initials=cleaned['name_initials'])
+      repository, _ = Repository.objects.get_or_create(name=cleaned['repository'])
+      name, _ = Name.objects.get_or_create(initials=cleaned['name'])
 
       auto_number_params = {
         'entry_date': cleaned['entry_date'],
