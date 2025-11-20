@@ -2,6 +2,7 @@ from datetime import date
 from typing import Any
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -12,9 +13,10 @@ from autonumber.ui.forms import AutoNumberForm
 from autonumber.ui.models import AutoNumber, Name, Repository
 
 
-class AutoNumberListView(ListView):
+class AutoNumberListView(LoginRequiredMixin, ListView):
   model = AutoNumber
   context_object_name = 'auto_numbers'
+  login_url = "/"
   paginate_by = 10
   ALLOWED_SORT_FIELDS = [
     'id',
@@ -64,9 +66,10 @@ class AutoNumberListView(ListView):
     return queryset
 
 
-class AutoNumberDetailView(DetailView):
+class AutoNumberDetailView(LoginRequiredMixin, DetailView):
   model = AutoNumber
   context_object_name = 'auto_number'
+  login_url = "/"
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -78,9 +81,10 @@ class AutoNumberDetailView(DetailView):
     return context
 
 
-class AutoNumberCreateView(CreateView):
+class AutoNumberCreateView(LoginRequiredMixin, CreateView):
   model = AutoNumber
   form_class = AutoNumberForm
+  login_url = "/"
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -113,9 +117,11 @@ class AutoNumberCreateView(CreateView):
     return super().form_invalid(form)
 
 
-class AutoNumberUpdateView(UpdateView):
+class AutoNumberUpdateView(LoginRequiredMixin, UpdateView):
   model = AutoNumber
   form_class = AutoNumberForm
+  login_url = "/"
+
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -142,9 +148,10 @@ class AutoNumberUpdateView(UpdateView):
     return super().form_invalid(form)
 
 
-class AutoNumberDeleteView(DeleteView, SuccessMessageMixin):
+class AutoNumberDeleteView(LoginRequiredMixin, DeleteView, SuccessMessageMixin):
   model = AutoNumber
   success_url = reverse_lazy('autonumber_list')
+  login_url = "/"
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)

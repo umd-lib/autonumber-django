@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from django.urls import path
 
+from autonumber.ui.models import User
 from autonumber.ui.views import login
 from autonumber.ui.views.auto_number import (
   AutoNumberCreateView,
@@ -84,12 +85,20 @@ urlpatterns = [
 
 
 def get_navigation_links(request: HttpRequest):
-  if request.user.is_authenticated:
+  authenticated = request.user.is_authenticated
+  included = User.objects.filter(cas_directory_id=request.user.username).exists()
+
+  if authenticated and included:
     return {
       'autonumber_list': 'Autonumbers',
       'name_list': 'Names',
       'repository_list': 'Repos',
       'user_list': 'Users',
+      '': f'Logged in as {request.user.username}',
+      'cas_ng_logout': 'Log Out',
+    }
+  elif authenticated:
+    return {
       '': f'Logged in as {request.user.username}',
       'cas_ng_logout': 'Log Out',
     }

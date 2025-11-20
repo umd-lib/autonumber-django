@@ -2,6 +2,7 @@ from datetime import date
 from typing import Any
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
 
@@ -9,8 +10,9 @@ from autonumber.ui.forms import BatchForm
 from autonumber.ui.models import AutoNumber, Name
 
 
-class BatchView(View):
+class BatchView(LoginRequiredMixin, View):
   template_name = 'batch/new.html'
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)

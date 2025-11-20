@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="notice">
+    {% if not authenticated %}
     <h1>Login Required</h1>
+    {% else %}
+    <h1>Not Authorized</h1>
+    {% endif %}
     <p>Access to {{ application_name }} is restricted to authorized users only.</p>
+    {% if not authenticated %}
     <form method="get" action="{% url 'cas_ng_login' %}">
         <p><button class="login" type="submit">Log In</button></p>
     </form>
+    {% endif %}
 </div>
 {% endblock %}
