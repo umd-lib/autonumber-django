@@ -6,10 +6,11 @@ from django.views.generic import (
   ListView,
 )
 
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import User
 
 
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = User
   context_object_name = 'users'
   login_url = '/'
@@ -22,7 +23,7 @@ class UserListView(LoginRequiredMixin, ListView):
     return context
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = User
   context_object_name = 'user'
   login_url = '/'

@@ -14,10 +14,11 @@ from django.views.generic import (
 )
 
 from autonumber.ui.forms import NameForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import Name
 
 
-class NameListView(LoginRequiredMixin, ListView):
+class NameListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = Name
   context_object_name = 'names'
   login_url = '/'
@@ -61,7 +62,7 @@ class NameListView(LoginRequiredMixin, ListView):
     return queryset
 
 
-class NameDetailView(LoginRequiredMixin, DetailView):
+class NameDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = Name
   context_object_name = 'name'
   login_url = '/'
@@ -76,7 +77,7 @@ class NameDetailView(LoginRequiredMixin, DetailView):
     return context
 
 
-class NameCreateView(LoginRequiredMixin, CreateView):
+class NameCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
   model = Name
   form_class = NameForm
   login_url = '/'
@@ -106,7 +107,7 @@ class NameCreateView(LoginRequiredMixin, CreateView):
     return super().form_invalid(form)
 
 
-class NameUpdateView(LoginRequiredMixin, UpdateView):
+class NameUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
   model = Name
   form_class = NameForm
   login_url = '/'
@@ -136,7 +137,7 @@ class NameUpdateView(LoginRequiredMixin, UpdateView):
     return super().form_invalid(form)
 
 
-class NameDeleteView(LoginRequiredMixin, DeleteView):
+class NameDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
   model = Name
   success_url = reverse_lazy('name_list')
   login_url = '/'

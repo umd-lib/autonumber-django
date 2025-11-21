@@ -10,10 +10,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from autonumber.ui.forms import AutoNumberForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import AutoNumber, Name, Repository
 
 
-class AutoNumberListView(LoginRequiredMixin, ListView):
+class AutoNumberListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = AutoNumber
   context_object_name = 'auto_numbers'
   login_url = "/"
@@ -66,7 +67,7 @@ class AutoNumberListView(LoginRequiredMixin, ListView):
     return queryset
 
 
-class AutoNumberDetailView(LoginRequiredMixin, DetailView):
+class AutoNumberDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = AutoNumber
   context_object_name = 'auto_number'
   login_url = "/"
@@ -81,7 +82,7 @@ class AutoNumberDetailView(LoginRequiredMixin, DetailView):
     return context
 
 
-class AutoNumberCreateView(LoginRequiredMixin, CreateView):
+class AutoNumberCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
   model = AutoNumber
   form_class = AutoNumberForm
   login_url = "/"
@@ -117,7 +118,7 @@ class AutoNumberCreateView(LoginRequiredMixin, CreateView):
     return super().form_invalid(form)
 
 
-class AutoNumberUpdateView(LoginRequiredMixin, UpdateView):
+class AutoNumberUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
   model = AutoNumber
   form_class = AutoNumberForm
   login_url = "/"
@@ -148,7 +149,7 @@ class AutoNumberUpdateView(LoginRequiredMixin, UpdateView):
     return super().form_invalid(form)
 
 
-class AutoNumberDeleteView(LoginRequiredMixin, DeleteView, SuccessMessageMixin):
+class AutoNumberDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView, SuccessMessageMixin):
   model = AutoNumber
   success_url = reverse_lazy('autonumber_list')
   login_url = "/"

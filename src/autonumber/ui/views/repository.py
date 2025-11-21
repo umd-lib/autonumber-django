@@ -14,10 +14,11 @@ from django.views.generic import (
 )
 
 from autonumber.ui.forms import RepositoryForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import Repository
 
 
-class RepositoryListView(LoginRequiredMixin, ListView):
+class RepositoryListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = Repository
   context_object_name = 'repositories'
   login_url = '/'
@@ -61,7 +62,7 @@ class RepositoryListView(LoginRequiredMixin, ListView):
     return queryset
 
 
-class RepositoryDetailView(LoginRequiredMixin, DetailView):
+class RepositoryDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = Repository
   context_object_name = 'repository'
   login_url = '/'
@@ -76,7 +77,7 @@ class RepositoryDetailView(LoginRequiredMixin, DetailView):
     return context
 
 
-class RepositoryCreateView(LoginRequiredMixin, CreateView):
+class RepositoryCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
   model = Repository
   form_class = RepositoryForm
   login_url = '/'
@@ -106,7 +107,7 @@ class RepositoryCreateView(LoginRequiredMixin, CreateView):
     return super().form_invalid(form)
 
 
-class RepositoryUpdateView(LoginRequiredMixin, UpdateView):
+class RepositoryUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
   model = Repository
   form_class = RepositoryForm
   login_url = '/'
@@ -136,7 +137,7 @@ class RepositoryUpdateView(LoginRequiredMixin, UpdateView):
     return super().form_invalid(form)
 
 
-class RepositoryDeleteView(LoginRequiredMixin, DeleteView):
+class RepositoryDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
   model = Repository
   success_url = reverse_lazy('repository_list')
   login_url = '/'

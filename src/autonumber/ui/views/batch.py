@@ -7,10 +7,11 @@ from django.shortcuts import redirect, render
 from django.views import View
 
 from autonumber.ui.forms import BatchForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import AutoNumber, Name
 
 
-class BatchView(LoginRequiredMixin, View):
+class BatchView(LoginRequiredMixin, AuthorizationRequiredMixin, View):
   template_name = 'batch/new.html'
   login_url = '/'
 
