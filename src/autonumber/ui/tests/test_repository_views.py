@@ -6,30 +6,30 @@ from autonumber.ui.models import Repository
 
 
 @pytest.mark.django_db
-def test_should_get_index(client):
+def test_should_get_index(authorized_client):
   url = reverse('repository_list')
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
   assert 'repositories' in response.context
 
 
 @pytest.mark.django_db
-def test_should_get_new(client):
+def test_should_get_new(authorized_client):
   url = reverse('repository_create')
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_should_create_repository(client):
+def test_should_create_repository(authorized_client):
   count_before = Repository.objects.count()
 
   form_data = {'name': 'MY-NEW-REPO'}
 
   url = reverse('repository_create')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert Repository.objects.count() == count_before + 1
 
@@ -42,29 +42,27 @@ def test_should_create_repository(client):
 
 
 @pytest.mark.django_db
-def test_should_show_repository(client, repository_one):
+def test_should_show_repository(authorized_client, repository_one):
   url = reverse('repository_detail', kwargs={'pk': repository_one.pk})
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
-  # Add this back when your UI is built:
-  # assert str(repository_one.name) in str(response.content)
 
 
 @pytest.mark.django_db
-def test_should_get_edit(client, repository_one):
+def test_should_get_edit(authorized_client, repository_one):
   url = reverse('repository_update', kwargs={'pk': repository_one.pk})
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_should_update_repository(client, repository_one):
+def test_should_update_repository(authorized_client, repository_one):
   update_data = {'name': 'UPDATED-NAME'}
 
   url = reverse('repository_update', kwargs={'pk': repository_one.pk})
-  response = client.post(url, data=update_data)
+  response = authorized_client.post(url, data=update_data)
 
   assert response.status_code == 302
   expected_url = reverse('repository_detail', kwargs={'pk': repository_one.pk})
@@ -75,11 +73,11 @@ def test_should_update_repository(client, repository_one):
 
 
 @pytest.mark.django_db
-def test_should_not_destroy_repository_with_auto_numbers(client, repository_one, auto_number_one):
+def test_should_not_destroy_repository_with_auto_numbers(authorized_client, repository_one, auto_number_one):
   count_before = Repository.objects.count()
 
   url = reverse('repository_delete', kwargs={'pk': repository_one.pk})
-  response = client.post(url)
+  response = authorized_client.post(url)
 
   assert Repository.objects.count() == count_before
 
@@ -88,13 +86,13 @@ def test_should_not_destroy_repository_with_auto_numbers(client, repository_one,
 
 
 @pytest.mark.django_db
-def test_should_destroy_repository_without_auto_numbers(client):
+def test_should_destroy_repository_without_auto_numbers(authorized_client):
   # New repo without dependencies
   new_repo = Repository.objects.create(name='deletable-repo')
   count_before = Repository.objects.count()
 
   url = reverse('repository_delete', kwargs={'pk': new_repo.pk})
-  response = client.post(url)
+  response = authorized_client.post(url)
 
   assert Repository.objects.count() == count_before - 1
   assert response.status_code == 302
@@ -104,9 +102,9 @@ def test_should_destroy_repository_without_auto_numbers(client):
 
 
 @pytest.mark.django_db
-def test_repository_list_pagination(client, repositories):
+def test_repository_list_pagination(authorized_client, repositories):
   url = reverse('repository_list')
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
   assertTemplateUsed(response, 'ui/repository_list.html')
@@ -121,15 +119,15 @@ def test_repository_list_pagination(client, repositories):
 
 
 @pytest.mark.django_db
-def test_repository_list_sorting(client):
+def test_repository_list_sorting(authorized_client):
   # Create two specific objects to test sorting
   old_obj = Repository.objects.create(name='one')
   new_obj = Repository.objects.create(name='two')
 
   url = reverse('repository_list')
 
-  response_asc = client.get(url, {'sort': 'name'})
+  response_asc = authorized_client.get(url, {'sort': 'name'})
   assert response_asc.context['object_list'][0] == old_obj
 
-  response_desc = client.get(url, {'sort': '-name'})
+  response_desc = authorized_client.get(url, {'sort': '-name'})
   assert response_desc.context['object_list'][0] == new_obj
