@@ -65,6 +65,7 @@ def names():
 
   return created_names
 
+
 @pytest.fixture
 def repositories():
   """
@@ -77,3 +78,27 @@ def repositories():
     created_repositories.append(Repository.objects.create(name=chr(char_code)))
 
   return created_repositories
+
+
+@pytest.fixture
+def authenticated_client(client, django_user_model):
+  """
+  Logs an arbitrary user into the Django test client
+  They will not be authorized
+  Used within tests for verifying authentication and autorization
+  """
+  user = django_user_model.objects.create_user(username='not_in_user_table', password='foobar')
+  client.force_login(user)
+  return client
+
+
+@pytest.fixture
+def authorized_client(client, django_user_model, user_one):
+  """
+  Logs user_one into the Django test client
+  With user_one added in the User Model they will be also authorized
+  Used within test checking the functionality of each view
+  """
+  user = django_user_model.objects.create_user(username=user_one.cas_directory_id, password='foobar')
+  client.force_login(user)
+  return client

@@ -5,9 +5,9 @@ from autonumber.ui.models import AutoNumber
 
 
 @pytest.mark.django_db
-def test_should_get_new(client):
+def test_should_get_new(authorized_client):
   url = reverse('batch')
-  response = client.get(url)
+  response = authorized_client.get(url)
 
   assert response.status_code == 200
   # A FormView will put 'form' in the context
@@ -15,7 +15,7 @@ def test_should_get_new(client):
 
 
 @pytest.mark.django_db
-def test_should_create_auto_number_batch(client, auto_number_one):
+def test_should_create_auto_number_batch(authorized_client, auto_number_one):
   quantity_to_add = 10
   count_before = AutoNumber.objects.count()
 
@@ -27,7 +27,7 @@ def test_should_create_auto_number_batch(client, auto_number_one):
   }
 
   url = reverse('batch')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert AutoNumber.objects.count() == count_before + quantity_to_add
 
@@ -37,7 +37,7 @@ def test_should_create_auto_number_batch(client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_name(client, auto_number_one):
+def test_require_name(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
   form_data = {
@@ -47,7 +47,7 @@ def test_require_name(client, auto_number_one):
   }
 
   url = reverse('batch')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert AutoNumber.objects.count() == count_before
 
@@ -57,13 +57,13 @@ def test_require_name(client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_repository(client, auto_number_one):
+def test_require_repository(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
   form_data = {'entry_date': auto_number_one.entry_date, 'name_initials': auto_number_one.name.initials, 'quantity': 10}
 
   url = reverse('batch')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert AutoNumber.objects.count() == count_before
   assert response.status_code == 200
@@ -72,7 +72,7 @@ def test_require_repository(client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_non_nil_quantity(client, auto_number_one):
+def test_require_non_nil_quantity(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
   form_data = {
@@ -83,7 +83,7 @@ def test_require_non_nil_quantity(client, auto_number_one):
   }
 
   url = reverse('batch')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert AutoNumber.objects.count() == count_before
   assert response.status_code == 200
@@ -92,7 +92,7 @@ def test_require_non_nil_quantity(client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_non_negative_quantity(client, auto_number_one):
+def test_require_non_negative_quantity(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
   form_data = {
@@ -103,7 +103,7 @@ def test_require_non_negative_quantity(client, auto_number_one):
   }
 
   url = reverse('batch')
-  response = client.post(url, data=form_data)
+  response = authorized_client.post(url, data=form_data)
 
   assert response.status_code == 200
   assert AutoNumber.objects.count() == count_before

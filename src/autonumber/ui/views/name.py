@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -13,12 +14,14 @@ from django.views.generic import (
 )
 
 from autonumber.ui.forms import NameForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import Name
 
 
-class NameListView(ListView):
+class NameListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = Name
   context_object_name = 'names'
+  login_url = '/'
   paginate_by = 10
   ALLOWED_SORT_FIELDS = ['initials', '-initials']
 
@@ -59,9 +62,10 @@ class NameListView(ListView):
     return queryset
 
 
-class NameDetailView(DetailView):
+class NameDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = Name
   context_object_name = 'name'
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -73,9 +77,10 @@ class NameDetailView(DetailView):
     return context
 
 
-class NameCreateView(CreateView):
+class NameCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
   model = Name
   form_class = NameForm
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -102,9 +107,10 @@ class NameCreateView(CreateView):
     return super().form_invalid(form)
 
 
-class NameUpdateView(UpdateView):
+class NameUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
   model = Name
   form_class = NameForm
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -131,9 +137,10 @@ class NameUpdateView(UpdateView):
     return super().form_invalid(form)
 
 
-class NameDeleteView(DeleteView):
+class NameDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
   model = Name
   success_url = reverse_lazy('name_list')
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)

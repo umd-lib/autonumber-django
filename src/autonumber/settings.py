@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e-&k0d8k@wi1j_7h_0yp!3)(fxmyybsa)wmi3ga23uuci=1q4u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['autonumber-local']
 PROJECT_PACKAGE_NAME = 'autonumber-django'
 APPLICATION_NAME = 'Autonumber'
 NAVIGATION_LINKS = 'autonumber.ui.urls.get_navigation_links'
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'umd_lib_style',
     'autonumber.ui',
+    'django_cas_ng',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_cas_ng.middleware.CASMiddleware',
 ]
 
 ROOT_URLCONF = 'autonumber.urls'
@@ -103,6 +105,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# For integrating with django-cas-ng
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+)
+
+CAS_SERVER_URL = 'https://shib.idm.umd.edu/shibboleth-idp/profile/cas/'
+CAS_VERSION = '2'
 
 
 # Internationalization

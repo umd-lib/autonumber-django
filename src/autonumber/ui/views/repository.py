@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -13,12 +14,14 @@ from django.views.generic import (
 )
 
 from autonumber.ui.forms import RepositoryForm
+from autonumber.ui.mixins import AuthorizationRequiredMixin
 from autonumber.ui.models import Repository
 
 
-class RepositoryListView(ListView):
+class RepositoryListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
   model = Repository
   context_object_name = 'repositories'
+  login_url = '/'
   paginate_by = 10
   ALLOWED_SORT_FIELDS = ['name', '-name']
 
@@ -59,9 +62,10 @@ class RepositoryListView(ListView):
     return queryset
 
 
-class RepositoryDetailView(DetailView):
+class RepositoryDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
   model = Repository
   context_object_name = 'repository'
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -73,9 +77,10 @@ class RepositoryDetailView(DetailView):
     return context
 
 
-class RepositoryCreateView(CreateView):
+class RepositoryCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
   model = Repository
   form_class = RepositoryForm
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -102,9 +107,10 @@ class RepositoryCreateView(CreateView):
     return super().form_invalid(form)
 
 
-class RepositoryUpdateView(UpdateView):
+class RepositoryUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
   model = Repository
   form_class = RepositoryForm
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
@@ -131,9 +137,10 @@ class RepositoryUpdateView(UpdateView):
     return super().form_invalid(form)
 
 
-class RepositoryDeleteView(DeleteView):
+class RepositoryDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
   model = Repository
   success_url = reverse_lazy('repository_list')
+  login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
