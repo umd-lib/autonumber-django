@@ -11,12 +11,12 @@ from autonumber.ui.views.auto_number import (
   AutoNumberUpdateView,
 )
 from autonumber.ui.views.batch import BatchView
-from autonumber.ui.views.repository import (
-  RepositoryCreateView,
-  RepositoryDeleteView,
-  RepositoryDetailView,
-  RepositoryListView,
-  RepositoryUpdateView,
+from autonumber.ui.views.collection_area import (
+  CollectionAreaCreateView,
+  CollectionAreaDeleteView,
+  CollectionAreaDetailView,
+  CollectionAreaListView,
+  CollectionAreaUpdateView,
 )
 from autonumber.ui.views.user import (
   UserDetailView,
@@ -45,22 +45,22 @@ urlpatterns = [
     AutoNumberDeleteView.as_view(),
     name='autonumber_delete',
   ),
-  path('repositories/', RepositoryListView.as_view(), name='repository_list'),
-  path('repositories/new/', RepositoryCreateView.as_view(), name='repository_create'),
+  path('collection_areas/', CollectionAreaListView.as_view(), name='collection_area_list'),
+  path('collection_areas/new/', CollectionAreaCreateView.as_view(), name='collection_area_create'),
   path(
-    'repositories/<int:pk>/',
-    RepositoryDetailView.as_view(),
-    name='repository_detail',
+    'collection_areas/<int:pk>/',
+    CollectionAreaDetailView.as_view(),
+    name='collection_area_detail',
   ),
   path(
-    'repositories/<int:pk>/edit/',
-    RepositoryUpdateView.as_view(),
-    name='repository_update',
+    'collection_areas/<int:pk>/edit/',
+    CollectionAreaUpdateView.as_view(),
+    name='collection_area_update',
   ),
   path(
-    'repositories/<int:pk>/delete/',
-    RepositoryDeleteView.as_view(),
-    name='repository_delete',
+    'collection_areas/<int:pk>/delete/',
+    CollectionAreaDeleteView.as_view(),
+    name='collection_area_delete',
   ),
 ]
 
@@ -72,7 +72,7 @@ def get_navigation_links(request: HttpRequest):
   if authenticated and included:
     return {
       'autonumber_list': 'Autonumbers',
-      'repository_list': 'Repos',
+      'collection_area_list': 'Collection Areas',
       'user_list': 'Users',
       '': f'Logged in as {request.user.username}',
       'cas_ng_logout': 'Log Out',

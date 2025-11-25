@@ -1,11 +1,11 @@
 from django import forms
 
-from autonumber.ui.models import AutoNumber, Repository
+from autonumber.ui.models import AutoNumber, CollectionArea
 
 
-class RepositoryForm(forms.ModelForm):
+class CollectionAreaForm(forms.ModelForm):
   class Meta:
-    model = Repository
+    model = CollectionArea
     fields = ['name']
 
   def clean_name(self):
@@ -17,9 +17,9 @@ class RepositoryForm(forms.ModelForm):
 class BatchForm(forms.Form):
   quantity = forms.IntegerField(min_value=1, required=True)
   entry_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
-  repository = forms.ModelChoiceField(
+  collection_area = forms.ModelChoiceField(
     # The queryset tells the dropdown what options to display
-    queryset=Repository.objects.all(),
+    queryset=CollectionArea.objects.all(),
     required=True,
   )
 
@@ -29,8 +29,8 @@ class BatchForm(forms.Form):
       return data.strip().lower()
     return data
 
-  def clean_repository_name(self):
-    data = self.cleaned_data.get('repository')
+  def clean_collection_area_name(self):
+    data = self.cleaned_data.get('collection_area')
     if data:
       return data.strip().lower()
     return data
@@ -39,7 +39,7 @@ class BatchForm(forms.Form):
 class AutoNumberForm(forms.ModelForm):
   class Meta:
     model = AutoNumber
-    fields = ['entry_date', 'repository']
+    fields = ['entry_date', 'collection_area']
 
     widgets = {
       'entry_date': forms.DateInput(attrs={'type': 'date'}),
