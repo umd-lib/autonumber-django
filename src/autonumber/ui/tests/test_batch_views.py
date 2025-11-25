@@ -22,7 +22,7 @@ def test_should_create_auto_number_batch(authorized_client, auto_number_one):
   form_data = {
     'entry_date': auto_number_one.entry_date,
     'name': auto_number_one.name,
-    'repository': auto_number_one.repository.pk,
+    'collection_area': auto_number_one.collection_area.pk,
     'quantity': quantity_to_add,
   }
 
@@ -37,7 +37,7 @@ def test_should_create_auto_number_batch(authorized_client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_repository(authorized_client, auto_number_one):
+def test_require_collection_area(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
   form_data = {'entry_date': auto_number_one.entry_date, 'name': auto_number_one.name, 'quantity': 10}
@@ -48,7 +48,7 @@ def test_require_repository(authorized_client, auto_number_one):
   assert AutoNumber.objects.count() == count_before
   assert response.status_code == 200
   assert 'form' in response.context
-  assert 'repository' in response.context['form'].errors
+  assert 'collection_area' in response.context['form'].errors
 
 
 @pytest.mark.django_db
@@ -58,7 +58,7 @@ def test_require_non_nil_quantity(authorized_client, auto_number_one):
   form_data = {
     'entry_date': auto_number_one.entry_date,
     'name': auto_number_one.name,
-    'repository': auto_number_one.repository.pk,
+    'collection_area': auto_number_one.collection_area.pk,
     # 'quantity' is omitted
   }
 
@@ -77,7 +77,7 @@ def test_require_non_negative_quantity(authorized_client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'repository': auto_number_one.repository.pk,
+    'collection_area': auto_number_one.collection_area.pk,
     'quantity': -10
   }
 

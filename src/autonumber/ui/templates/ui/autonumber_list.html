@@ -44,7 +44,7 @@
       <th><a href="?sort=id">Number</a></th>
       <th><a href="?sort=entry_date">Entry date</a></th>
       <th><a href="?sort=name">Name</a></th>
-      <th><a href="?sort=repository__name">Repository</a></th>
+      <th><a href="?sort=collection_area__name">Collection Area</a></th>
       <th></th>
       <th></th>
     </tr>
@@ -55,7 +55,7 @@
       <td><a href="{{ auto_number.get_absolute_url }}">{{ auto_number.id }}</a></td>
       <td>{{ auto_number.entry_date }}</td>
       <td>{{ auto_number.name }}</td>
-      <td><a href="{{ auto_number.repository.get_absolute_url }}">{{ auto_number.repository }}</a></td>
+      <td><a href="{{ auto_number.collection_area.get_absolute_url }}">{{ auto_number.collection_area }}</a></td>
       <td><a href="{% url 'autonumber_update' auto_number.pk %}" class="button edit">Edit</a></td>
       <td><a href="{% url 'autonumber_delete' auto_number.pk %}" class="button delete">Delete</a></td>
     </tr>

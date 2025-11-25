@@ -1,6 +1,6 @@
 import pytest
 
-from autonumber.ui.models import AutoNumber, Repository, User
+from autonumber.ui.models import AutoNumber, CollectionArea, User
 
 
 @pytest.fixture
@@ -9,13 +9,13 @@ def name_one():
 
 
 @pytest.fixture
-def repository_one():
-  return Repository.objects.create(name='Repo One')
+def collection_area_one():
+  return CollectionArea.objects.create(name='Collection Area One')
 
 
 @pytest.fixture
-def repository_two():
-  return Repository.objects.create(name='repo-two')
+def collection_area_two():
+  return CollectionArea.objects.create(name='Collection Area Two')
 
 
 @pytest.fixture
@@ -24,41 +24,41 @@ def user_one():
 
 
 @pytest.fixture
-def auto_number_one(name_one, repository_one):
+def auto_number_one(name_one, collection_area_one):
   """
-  Pytest will automatically run name_one and repository_one
+  Pytest will automatically run name_one and collection_area_one
   and pass their results into this fixture.
   """
   return AutoNumber.objects.create(
     entry_date='2016-03-31',
     name=name_one,
-    repository=repository_one,
+    collection_area=collection_area_one,
   )
 
 
 @pytest.fixture
-def auto_numbers(name_one, repository_one):
+def auto_numbers(name_one, collection_area_one):
   """
   Provides 15 AutoNumber objects to force pagination.
   """
   auto_nums = []
   for i in range(15):
-    auto_nums.append(AutoNumber.objects.create(entry_date='2025-01-01', name=name_one, repository=repository_one))
+    auto_nums.append(AutoNumber.objects.create(entry_date='2025-01-01', name=name_one, collection_area=collection_area_one))
   return auto_nums
 
 
 @pytest.fixture
-def repositories():
+def collection_areas():
   """
   Provides 15 Name objects, created out of alphabetical order
   to properly test sorting.
   """
-  created_repositories = []
-  # Create 15 repositories from 'A' to 'O'
+  collection_areas = []
+  # Create 15 collection areas from 'A' to 'O'
   for char_code in range(ord('A'), ord('P')):
-    created_repositories.append(Repository.objects.create(name=chr(char_code)))
+    collection_areas.append(CollectionArea.objects.create(name=chr(char_code)))
 
-  return created_repositories
+  return collection_areas
 
 
 @pytest.fixture
