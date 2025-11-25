@@ -11,7 +11,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from autonumber.ui.forms import AutoNumberForm
 from autonumber.ui.mixins import AuthorizationRequiredMixin
-from autonumber.ui.models import AutoNumber, Name, Repository
+from autonumber.ui.models import AutoNumber, Repository, User
 
 
 class AutoNumberListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
@@ -97,11 +97,16 @@ class AutoNumberCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, Creat
     return context
 
   def get_initial(self):
-    # Equivalent to building nested objects in Rails
-    return {'name': Name(), 'repository': Repository(), 'entry_date': date.today()}
+    return {'repository': Repository(), 'entry_date': date.today()}
 
   def form_valid(self, form):
-    self.object = form.save()
+    self.object = form.save(commit=False)
+
+    cas_directory_id = self.request.user.get_username()
+    user = User.objects.filter(cas_directory_id=cas_directory_id).first()
+    self.object.name = user.name
+
+    self.object.save()
     messages.success(self.request, f'Created new number: {self.object.id}')
 
     return redirect(self.object.get_absolute_url())

@@ -1,6 +1,6 @@
 from django import forms
 
-from autonumber.ui.models import AutoNumber, Name, Repository
+from autonumber.ui.models import AutoNumber, Repository
 
 
 class RepositoryForm(forms.ModelForm):
@@ -14,16 +14,9 @@ class RepositoryForm(forms.ModelForm):
     return name
 
 
-class NameForm(forms.ModelForm):
-  class Meta:
-    model = Name
-    fields = ['initials']
-
-
 class BatchForm(forms.Form):
   quantity = forms.IntegerField(min_value=1, required=True)
   entry_date = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
-  name = forms.CharField(max_length=10, required=True)
   repository = forms.ModelChoiceField(
     # The queryset tells the dropdown what options to display
     queryset=Repository.objects.all(),
@@ -46,7 +39,7 @@ class BatchForm(forms.Form):
 class AutoNumberForm(forms.ModelForm):
   class Meta:
     model = AutoNumber
-    fields = ['entry_date', 'name', 'repository']
+    fields = ['entry_date', 'repository']
 
     widgets = {
       'entry_date': forms.DateInput(attrs={'type': 'date'}),
