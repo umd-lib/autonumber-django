@@ -1,16 +1,26 @@
 import pytest
 
-from autonumber.ui.models import AutoNumber, Name, Repository, User
+from autonumber.ui.models import AutoNumber, Repository, User
 
 
 @pytest.fixture
 def name_one():
-  return Name.objects.create(initials='Name One')
+  return 'Name One'
 
 
 @pytest.fixture
 def repository_one():
   return Repository.objects.create(name='Repo One')
+
+
+@pytest.fixture
+def repository_two():
+  return Repository.objects.create(name='repo-two')
+
+
+@pytest.fixture
+def user_one():
+  return User.objects.create(cas_directory_id='user-one', name='Test User')
 
 
 @pytest.fixture
@@ -27,21 +37,6 @@ def auto_number_one(name_one, repository_one):
 
 
 @pytest.fixture
-def user_one():
-  return User.objects.create(cas_directory_id='user-one', name='Test User')
-
-
-@pytest.fixture
-def name_two():
-  return Name.objects.create(initials='name-two')
-
-
-@pytest.fixture
-def repository_two():
-  return Repository.objects.create(name='repo-two')
-
-
-@pytest.fixture
 def auto_numbers(name_one, repository_one):
   """
   Provides 15 AutoNumber objects to force pagination.
@@ -50,20 +45,6 @@ def auto_numbers(name_one, repository_one):
   for i in range(15):
     auto_nums.append(AutoNumber.objects.create(entry_date='2025-01-01', name=name_one, repository=repository_one))
   return auto_nums
-
-
-@pytest.fixture
-def names():
-  """
-  Provides 15 Name objects, created out of alphabetical order
-  to properly test sorting.
-  """
-  created_names = []
-  # Create 15 names from 'A' to 'O'
-  for char_code in range(ord('A'), ord('P')):
-    created_names.append(Name.objects.create(initials=chr(char_code)))
-
-  return created_names
 
 
 @pytest.fixture

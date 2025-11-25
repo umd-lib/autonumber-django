@@ -21,7 +21,7 @@ def test_should_create_auto_number_batch(authorized_client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name': auto_number_one.name.initials,
+    'name': auto_number_one.name,
     'repository': auto_number_one.repository.pk,
     'quantity': quantity_to_add,
   }
@@ -37,30 +37,10 @@ def test_should_create_auto_number_batch(authorized_client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_require_name(authorized_client, auto_number_one):
-  count_before = AutoNumber.objects.count()
-
-  form_data = {
-    'entry_date': auto_number_one.entry_date,
-    'repository_name': auto_number_one.repository.pk,
-    'quantity': 10,
-  }
-
-  url = reverse('batch')
-  response = authorized_client.post(url, data=form_data)
-
-  assert AutoNumber.objects.count() == count_before
-
-  assert response.status_code == 200
-  assert 'form' in response.context
-  assert 'name' in response.context['form'].errors
-
-
-@pytest.mark.django_db
 def test_require_repository(authorized_client, auto_number_one):
   count_before = AutoNumber.objects.count()
 
-  form_data = {'entry_date': auto_number_one.entry_date, 'name_initials': auto_number_one.name.initials, 'quantity': 10}
+  form_data = {'entry_date': auto_number_one.entry_date, 'name': auto_number_one.name, 'quantity': 10}
 
   url = reverse('batch')
   response = authorized_client.post(url, data=form_data)
@@ -77,7 +57,7 @@ def test_require_non_nil_quantity(authorized_client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name': auto_number_one.name.initials,
+    'name': auto_number_one.name,
     'repository': auto_number_one.repository.pk,
     # 'quantity' is omitted
   }
@@ -97,7 +77,6 @@ def test_require_non_negative_quantity(authorized_client, auto_number_one):
 
   form_data = {
     'entry_date': auto_number_one.entry_date,
-    'name': auto_number_one.name.initials,
     'repository': auto_number_one.repository.pk,
     'quantity': -10
   }
