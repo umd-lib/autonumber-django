@@ -16,10 +16,6 @@
       </tr>
 
       <tr class="field">
-        <th>{{ form.name.label_tag }}</th>
-        <td>{{ form.name }}</td>
-      </tr>
-      <tr class="field">
         <th>{{ form.repository.label_tag }}</th>
         <td>{{ form.repository }}</td>
       </tr>
@@ -34,5 +30,6 @@
       </tr>
     </tbody>
   </table>
+  {{ form.name }}
 </form>
 {% endblock %}

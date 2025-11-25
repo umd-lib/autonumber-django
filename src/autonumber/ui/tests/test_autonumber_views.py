@@ -29,7 +29,7 @@ def test_should_create_auto_number(authorized_client, name_one, repository_one):
   count_before = AutoNumber.objects.count()
 
   url = reverse('autonumber_create')
-  form_data = {'entry_date': '2025-11-10', 'name': name_one.pk, 'repository': repository_one.pk}
+  form_data = {'entry_date': '2025-11-10', 'name': name_one, 'repository': repository_one.pk}
   response = authorized_client.post(url, data=form_data)
   assert response.status_code == 302
   assert AutoNumber.objects.count() == count_before + 1
@@ -56,8 +56,8 @@ def test_should_get_edit(authorized_client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_should_update_auto_number(authorized_client, auto_number_one, name_two, repository_two):
-  update_data = {'entry_date': '2025-11-11', 'name': name_two.pk, 'repository': repository_two.pk}
+def test_should_update_auto_number(authorized_client, auto_number_one, repository_two):
+  update_data = {'entry_date': '2025-11-11', 'repository': repository_two.pk}
 
   url = reverse('autonumber_update', kwargs={'pk': auto_number_one.pk})
   response = authorized_client.post(url, data=update_data)
@@ -67,7 +67,6 @@ def test_should_update_auto_number(authorized_client, auto_number_one, name_two,
   assert response.url == expected_url
 
   auto_number_one.refresh_from_db()
-  assert auto_number_one.name == name_two
   assert auto_number_one.repository == repository_two
 
 

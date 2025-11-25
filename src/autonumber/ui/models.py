@@ -2,16 +2,6 @@ from django.db import models, transaction
 from django.urls import reverse
 
 
-class Name(models.Model):
-  initials = models.CharField(max_length=255, unique=True)
-
-  def __str__(self):
-    return self.initials
-
-  def get_absolute_url(self):
-    return reverse('name_detail', kwargs={'pk': self.pk})
-
-
 class Repository(models.Model):
   name = models.CharField(max_length=255, unique=True)
 
@@ -29,13 +19,10 @@ class User(models.Model):
 
 class AutoNumber(models.Model):
   entry_date = models.DateField(null=True, blank=True)
-  name = models.ForeignKey(Name, on_delete=models.PROTECT, related_name='auto_numbers')
+  name = models.CharField(max_length=255)
   repository = models.ForeignKey(Repository, on_delete=models.PROTECT, related_name='auto_numbers')
 
   def save(self, *args, **kwargs):
-    if self.name:
-      self.name.save()
-
     if self.repository:
       self.repository.save()
 

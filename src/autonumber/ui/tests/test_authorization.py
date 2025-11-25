@@ -26,29 +26,6 @@ def test_autonumber_views_not_authorized(authenticated_client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_name_views_not_authorized(authenticated_client, name_one):
-  response = authenticated_client.get(reverse('name_list'))
-  assert response.status_code == 200
-  assert 'Not Authorized' in response.text
-
-  response = authenticated_client.get(reverse('name_create'))
-  assert response.status_code == 200
-  assert 'Not Authorized' in response.text
-
-  response = authenticated_client.get(reverse('name_detail', kwargs={'pk': name_one.pk}))
-  assert response.status_code == 200
-  assert 'Not Authorized' in response.text
-
-  response = authenticated_client.get(reverse('name_update', kwargs={'pk': name_one.pk}))
-  assert response.status_code == 200
-  assert 'Not Authorized' in response.text
-
-  response = authenticated_client.get(reverse('name_delete', kwargs={'pk': name_one.pk}))
-  assert response.status_code == 200
-  assert 'Not Authorized' in response.text
-
-
-@pytest.mark.django_db
 def test_repository_views_not_authorized(authenticated_client, repository_one):
   response = authenticated_client.get(reverse('repository_list'))
   assert response.status_code == 200

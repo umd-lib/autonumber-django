@@ -8,7 +8,7 @@ from django.views import View
 
 from autonumber.ui.forms import BatchForm
 from autonumber.ui.mixins import AuthorizationRequiredMixin
-from autonumber.ui.models import AutoNumber, Name
+from autonumber.ui.models import AutoNumber, User
 
 
 class BatchView(LoginRequiredMixin, AuthorizationRequiredMixin, View):
@@ -25,7 +25,9 @@ class BatchView(LoginRequiredMixin, AuthorizationRequiredMixin, View):
     return context
 
   def get(self, request):
-    initial_data = {'entry_date': date.today(), 'quantity': 1}
+    cas_directory_id = self.request.user.get_username()
+    user = User.objects.filter(cas_directory_id=cas_directory_id).first()
+    initial_data = {'entry_date': date.today(), 'quantity': 1, 'name': user.name}
 
     form = BatchForm(initial=initial_data)
     return render(request, self.template_name, {'form': form})
@@ -38,12 +40,13 @@ class BatchView(LoginRequiredMixin, AuthorizationRequiredMixin, View):
       quantity = cleaned['quantity']
 
       repository = cleaned['repository']
-      name, _ = Name.objects.get_or_create(initials=cleaned['name'])
+      cas_directory_id = self.request.user.get_username()
+      user = User.objects.filter(cas_directory_id=cas_directory_id).first()
 
       auto_number_params = {
         'entry_date': cleaned['entry_date'],
         'repository': repository,
-        'name': name,
+        'name': user.name,
       }
 
       stats = AutoNumber.create_batch(quantity, auto_number_params)

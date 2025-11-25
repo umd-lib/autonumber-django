@@ -10,15 +10,7 @@ from autonumber.ui.views.auto_number import (
   AutoNumberListView,
   AutoNumberUpdateView,
 )
-from autonumber.ui.views.autocomplete import autocomplete_names, autocomplete_repositories
 from autonumber.ui.views.batch import BatchView
-from autonumber.ui.views.name import (
-  NameCreateView,
-  NameDeleteView,
-  NameDetailView,
-  NameListView,
-  NameUpdateView,
-)
 from autonumber.ui.views.repository import (
   RepositoryCreateView,
   RepositoryDeleteView,
@@ -34,12 +26,6 @@ from autonumber.ui.views.user import (
 urlpatterns = [
   path('', login, name='root'),
   path('batch/', BatchView.as_view(), name='batch'),
-  path('autocomplete/names/', autocomplete_names, name='autocomplete_names'),
-  path(
-    'autocomplete/repositories/',
-    autocomplete_repositories,
-    name='autocomplete_repositories',
-  ),
   path('users/', UserListView.as_view(), name='user_list'),
   path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
   path('auto_numbers/', AutoNumberListView.as_view(), name='autonumber_list'),
@@ -59,11 +45,6 @@ urlpatterns = [
     AutoNumberDeleteView.as_view(),
     name='autonumber_delete',
   ),
-  path('names/', NameListView.as_view(), name='name_list'),
-  path('names/new/', NameCreateView.as_view(), name='name_create'),
-  path('names/<int:pk>/', NameDetailView.as_view(), name='name_detail'),
-  path('names/<int:pk>/edit/', NameUpdateView.as_view(), name='name_update'),
-  path('names/<int:pk>/delete/', NameDeleteView.as_view(), name='name_delete'),
   path('repositories/', RepositoryListView.as_view(), name='repository_list'),
   path('repositories/new/', RepositoryCreateView.as_view(), name='repository_create'),
   path(
@@ -91,7 +72,6 @@ def get_navigation_links(request: HttpRequest):
   if authenticated and included:
     return {
       'autonumber_list': 'Autonumbers',
-      'name_list': 'Names',
       'repository_list': 'Repos',
       'user_list': 'Users',
       '': f'Logged in as {request.user.username}',
