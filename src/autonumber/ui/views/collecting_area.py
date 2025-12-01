@@ -13,14 +13,14 @@ from django.views.generic import (
   UpdateView,
 )
 
-from autonumber.ui.forms import RepositoryForm
+from autonumber.ui.forms import CollectingAreaForm
 from autonumber.ui.mixins import AuthorizationRequiredMixin
-from autonumber.ui.models import Repository
+from autonumber.ui.models import CollectingArea
 
 
-class RepositoryListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
-  model = Repository
-  context_object_name = 'repositories'
+class CollectingAreaListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
+  model = CollectingArea
+  context_object_name = 'collecting_areas'
   login_url = '/'
   paginate_by = 10
   ALLOWED_SORT_FIELDS = ['name', '-name']
@@ -29,7 +29,7 @@ class RepositoryListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListVie
     context = super().get_context_data(**kwargs)
     context.update(
       {
-        'title': 'Repositories',
+        'title': 'Collecting Areas',
       }
     )
 
@@ -62,37 +62,37 @@ class RepositoryListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListVie
     return queryset
 
 
-class RepositoryDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
-  model = Repository
-  context_object_name = 'repository'
+class CollectingAreaDetailView(LoginRequiredMixin, AuthorizationRequiredMixin, DetailView):
+  model = CollectingArea
+  context_object_name = 'collecting_area'
   login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
     context.update(
       {
-        'title': 'Repository',
+        'title': 'Collecting Area',
       }
     )
     return context
 
 
-class RepositoryCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
-  model = Repository
-  form_class = RepositoryForm
+class CollectingAreaCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, CreateView):
+  model = CollectingArea
+  form_class = CollectingAreaForm
   login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
     context.update(
       {
-        'title': 'Create Repository',
+        'title': 'Create Collecting Area',
       }
     )
     return context
 
   def form_valid(self, form):
-    messages.success(self.request, 'Repository was successfully created.')
+    messages.success(self.request, 'Collecting Area was successfully created.')
     return super().form_valid(form)
 
   def form_invalid(self, form):
@@ -107,22 +107,22 @@ class RepositoryCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, Creat
     return super().form_invalid(form)
 
 
-class RepositoryUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
-  model = Repository
-  form_class = RepositoryForm
+class CollectingAreaUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, UpdateView):
+  model = CollectingArea
+  form_class = CollectingAreaForm
   login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
     context.update(
       {
-        'title': 'Update Repository',
+        'title': 'Update Collecting Area',
       }
     )
     return context
 
   def form_valid(self, form):
-    messages.success(self.request, 'Repository was successfully updated.')
+    messages.success(self.request, 'Collecting Area was successfully updated.')
     return super().form_valid(form)
 
   def form_invalid(self, form):
@@ -137,16 +137,16 @@ class RepositoryUpdateView(LoginRequiredMixin, AuthorizationRequiredMixin, Updat
     return super().form_invalid(form)
 
 
-class RepositoryDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
-  model = Repository
-  success_url = reverse_lazy('repository_list')
+class CollectingAreaDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, DeleteView):
+  model = CollectingArea
+  success_url = reverse_lazy('collecting_area_list')
   login_url = '/'
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
     context = super().get_context_data(**kwargs)
     context.update(
       {
-        'title': 'Delete Repository',
+        'title': 'Delete Collecting Area',
       }
     )
     return context
@@ -156,8 +156,8 @@ class RepositoryDeleteView(LoginRequiredMixin, AuthorizationRequiredMixin, Delet
 
     try:
       self.object.delete()
-      messages.success(request, 'Repository was successfully destroyed.')
+      messages.success(request, 'Collecting Area was successfully destroyed.')
       return redirect(self.success_url)
     except ProtectedError:
-      messages.error(request, 'Repository cannot be removed because it has associated Auto Numbers.')
+      messages.error(request, 'Collecting Area cannot be removed because it has associated Auto Numbers.')
       return redirect(self.object.get_absolute_url())

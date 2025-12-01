@@ -11,7 +11,7 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from autonumber.ui.forms import AutoNumberForm
 from autonumber.ui.mixins import AuthorizationRequiredMixin
-from autonumber.ui.models import AutoNumber, Repository, User
+from autonumber.ui.models import AutoNumber, CollectingArea, User
 
 
 class AutoNumberListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListView):
@@ -26,8 +26,8 @@ class AutoNumberListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListVie
     '-entry_date',
     'name__initials',
     '-name__initials',
-    'repository__name',
-    '-repository__name',
+    'collecting_area__name',
+    '-collecting_area__name',
   ]
 
   def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -55,7 +55,7 @@ class AutoNumberListView(LoginRequiredMixin, AuthorizationRequiredMixin, ListVie
     query = self.request.GET.get('q')
 
     if query:
-      queryset = queryset.filter(Q(name__initials__icontains=query) | Q(repository__name__icontains=query)).distinct()
+      queryset = queryset.filter(Q(name__initials__icontains=query) | Q(collecting_area__name__icontains=query)).distinct()
 
     sort_by = self.request.GET.get('sort')
 
@@ -97,7 +97,7 @@ class AutoNumberCreateView(LoginRequiredMixin, AuthorizationRequiredMixin, Creat
     return context
 
   def get_initial(self):
-    return {'repository': Repository(), 'entry_date': date.today()}
+    return {'collecting_area': CollectingArea(), 'entry_date': date.today()}
 
   def form_valid(self, form):
     self.object = form.save(commit=False)
