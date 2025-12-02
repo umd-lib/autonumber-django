@@ -19,7 +19,7 @@ class Command(BaseCommand):
     try:
       with open(filename) as file:
         dict_reader = csv.DictReader(file)
-      return list(dict_reader)
+        return list(dict_reader)
     except FileNotFoundError:
       self.stdout.write(self.style.ERROR(f'File not found: {filename}'))
       return None
@@ -28,8 +28,8 @@ class Command(BaseCommand):
       return None
 
   def handle(self, *args, **options):
-    repo_dict = self._read_csv(options.get('repositories_csv', 'repositories.csv'))
-    name_dict = self._read_csv(options.get('names.csv', 'names.csv'))
+    repo_dict = self._read_csv(options.get('repositories', 'repositories.csv'))
+    name_dict = self._read_csv(options.get('names', 'names.csv'))
     number_dict = self._read_csv(options.get('auto_numbers', 'auto_numbers.csv'))
     user_dict = self._read_csv(options.get('users', 'users.csv'))
 
