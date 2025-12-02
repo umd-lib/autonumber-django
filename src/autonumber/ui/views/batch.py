@@ -39,13 +39,13 @@ class BatchView(LoginRequiredMixin, AuthorizationRequiredMixin, View):
       cleaned = form.cleaned_data
       quantity = cleaned['quantity']
 
-      repository = cleaned['repository']
+      collecting_area = cleaned['collecting_area']
       cas_directory_id = self.request.user.get_username()
       user = User.objects.filter(cas_directory_id=cas_directory_id).first()
 
       auto_number_params = {
         'entry_date': cleaned['entry_date'],
-        'repository': repository,
+        'collecting_area': collecting_area,
         'name': user.name,
       }
 

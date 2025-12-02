@@ -26,24 +26,24 @@ def test_autonumber_views_not_authorized(authenticated_client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_repository_views_not_authorized(authenticated_client, repository_one):
-  response = authenticated_client.get(reverse('repository_list'))
+def test_collecting_area_views_not_authorized(authenticated_client, collecting_area_one):
+  response = authenticated_client.get(reverse('collecting_area_list'))
   assert response.status_code == 200
   assert 'Not Authorized' in response.text
 
-  response = authenticated_client.get(reverse('repository_create'))
+  response = authenticated_client.get(reverse('collecting_area_create'))
   assert response.status_code == 200
   assert 'Not Authorized' in response.text
 
-  response = authenticated_client.get(reverse('repository_detail', kwargs={'pk': repository_one.pk}))
+  response = authenticated_client.get(reverse('collecting_area_detail', kwargs={'pk': collecting_area_one.pk}))
   assert response.status_code == 200
   assert 'Not Authorized' in response.text
 
-  response = authenticated_client.get(reverse('repository_update', kwargs={'pk': repository_one.pk}))
+  response = authenticated_client.get(reverse('collecting_area_update', kwargs={'pk': collecting_area_one.pk}))
   assert response.status_code == 200
   assert 'Not Authorized' in response.text
 
-  response = authenticated_client.get(reverse('repository_delete', kwargs={'pk': repository_one.pk}))
+  response = authenticated_client.get(reverse('collecting_area_delete', kwargs={'pk': collecting_area_one.pk}))
   assert response.status_code == 200
   assert 'Not Authorized' in response.text
 

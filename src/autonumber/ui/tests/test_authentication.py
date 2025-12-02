@@ -46,8 +46,8 @@ def test_autonumber_views_require_login(client, auto_number_one):
 
 
 @pytest.mark.django_db
-def test_repository_views_require_login(client, repository_one):
-  protected_url = reverse('repository_list')
+def test_collecting_area_views_require_login(client, collecting_area_one):
+  protected_url = reverse('collecting_area_list')
   response = client.get(protected_url)
 
   assert response.status_code == 302
@@ -55,7 +55,7 @@ def test_repository_views_require_login(client, repository_one):
   expected_redirect_url = f'/?next={protected_url}'
   assert response.url == expected_redirect_url
 
-  protected_url = reverse('repository_create')
+  protected_url = reverse('collecting_area_create')
   response = client.get(protected_url)
 
   assert response.status_code == 302
@@ -63,7 +63,7 @@ def test_repository_views_require_login(client, repository_one):
   expected_redirect_url = f'/?next={protected_url}'
   assert response.url == expected_redirect_url
 
-  protected_url = reverse('repository_detail', kwargs={'pk': repository_one.pk})
+  protected_url = reverse('collecting_area_detail', kwargs={'pk': collecting_area_one.pk})
   response = client.get(protected_url)
 
   assert response.status_code == 302
@@ -71,7 +71,7 @@ def test_repository_views_require_login(client, repository_one):
   expected_redirect_url = f'/?next={protected_url}'
   assert response.url == expected_redirect_url
 
-  protected_url = reverse('repository_update', kwargs={'pk': repository_one.pk})
+  protected_url = reverse('collecting_area_update', kwargs={'pk': collecting_area_one.pk})
   response = client.get(protected_url)
 
   assert response.status_code == 302
@@ -79,7 +79,7 @@ def test_repository_views_require_login(client, repository_one):
   expected_redirect_url = f'/?next={protected_url}'
   assert response.url == expected_redirect_url
 
-  protected_url = reverse('repository_delete', kwargs={'pk': repository_one.pk})
+  protected_url = reverse('collecting_area_delete', kwargs={'pk': collecting_area_one.pk})
   response = client.get(protected_url)
 
   assert response.status_code == 302
