@@ -11,25 +11,55 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from socket import gethostbyname, gethostname
+
+from django.core.management.utils import get_random_secret_key
+from environ import Env
+from urlobject import URLObject
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Static file dir
+STATIC_ROOT = str(BASE_DIR / 'staticfiles')
+
+# Take environment variables from .env file
+Env.read_env(BASE_DIR / '.env')
+env = Env()
+
+BASE_URL = URLObject(env.str('BASE_URL', 'http://localhost:8000/'))
+CSRF_TRUSTED_ORIGINS = [str(BASE_URL.with_path(''))]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e-&k0d8k@wi1j_7h_0yp!3)(fxmyybsa)wmi3ga23uuci=1q4u'
+SECRET_KEY = env('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = ['autonumber-local']
+# Remember that in your browser “SameSite=None” attribute MUST also have the “Secure” attribute,
+# which is required in order to use “SameSite=None”, otherwise the cookie will be blocked.
+SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
+
+ALLOWED_HOSTS = [BASE_URL.hostname]
+# Add the IP address (used by k8s health probes)
+try:
+    ALLOWED_HOSTS.append(gethostbyname(gethostname()))
+except OSError:
+    # ignore if we can't get the IP address
+    pass
+
+# Kubernetes internal host, used for inter-pod communication from the
+# Handle.net server instance, and other Kubernetes pods
+K8S_INTERNAL_HOST = URLObject(env.str('K8S_INTERNAL_HOST', 'autonumber-app'))
+ALLOWED_HOSTS.append(K8S_INTERNAL_HOST)
+
 PROJECT_PACKAGE_NAME = 'autonumber-django'
 APPLICATION_NAME = 'Autonumber'
 NAVIGATION_LINKS = 'autonumber.ui.urls.get_navigation_links'
-
+ENVIRONMENT = env.str('ENVIRONMENT', 'development')
 
 # Application definition
 
@@ -54,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_cas_ng.middleware.CASMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'autonumber.urls'
@@ -82,8 +113,12 @@ WSGI_APPLICATION = 'autonumber.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env.str('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': env.str('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': env.str('DB_USER', ''),
+        'PASSWORD': env.str('DB_PASSWORD', ''),
+        'HOST': env.str('DB_HOST', ''),
+        'PORT': env.str('DB_PORT', ''),
     }
 }
 
@@ -138,3 +173,36 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Logging
+LOGGING = {
+    'version': 1,  # the dictConfig format version
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{name} {levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': env.str('ROOT_LOG_LEVEL', 'INFO'),
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': env.str('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}

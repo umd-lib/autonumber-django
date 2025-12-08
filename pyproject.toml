@@ -5,10 +5,15 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14.0"
 dependencies = [
+    "click>=8.3.1",
     "django>=5.2.7",
     "django-cas-ng>=5.0.1",
+    "django-environ>=0.12.0",
     "django-umd-lib-style>=1.2.0",
     "djangosaml2>=1.11.1",
+    "urlobject>=3.0.0",
+    "waitress>=3.0.2",
+    "whitenoise>=6.11.0",
 ]
 
 [project.optional-dependencies]
@@ -17,6 +22,12 @@ dev = [
     "pytest-django>=4.11.1",
     "ruff>=0.14.5",
 ]
+prod = [
+    "psycopg2-binary>=2.9.11",
+]
+
+[project.scripts]
+autonumber = "autonumber.server:run"
 
 [build-system]
 requires = ["setuptools>=61.0"]
