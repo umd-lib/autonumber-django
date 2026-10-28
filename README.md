@@ -25,13 +25,13 @@ cd autonumber-django
 With uv you can install python like so:
 
 ```zsh
-uv python install 3.14.0
+uv python install 3.14.10
 ```
 
 With pyenv you use
 
 ```zsh
-pyenv install 3.14.0
+pyenv install 3.14.10
 ```
 
 ### Option 1: Using `uv` (Recommended)

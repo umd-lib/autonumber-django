@@ -1,5 +1,5 @@
 # Pull base image
-FROM python:3.14.0-slim
+FROM python:3.14.10-slim
 
 RUN apt-get update && \
     apt-get clean
